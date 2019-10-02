@@ -1,27 +1,40 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
 from PyQt5.QtGui import QIcon
-class Example(QMainWindow):
-    
+from PyQt5.QtCore import pyqtSlot
+
+
+class App(QWidget):
     def __init__(self):
         super().__init__()
+        self.title = 'Программа'
+        self.left = 0
+        self.top = 0
+        self.width = 500
+        self.height = 400
         self.initUI()
+    
+    def initUI(self):
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
         
-    def initUI(self):               
-        exitAction = QAction(QIcon('exit.png'), '&Exit', self)        
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(qApp.quit)
-        self.statusBar()
-        menubar = self.menuBar()
-        fileMenu = menubar.addMenu('&File')
-        fileMenu.addAction(exitAction)
+        button = QPushButton('Сформировать', self)
+        button.setToolTip('Формирование документа')
+        button.move(10,60)
+        button.clicked.connect(self.on_click)
+
+        button = QPushButton('Ввести данные', self)
+        button.move(10,300)
+        button.clicked.connect(self.on_click)
         
-        self.setGeometry(300, 300, 300, 200)
-        self.setWindowTitle('Menubar')    
-        self.show()  
-        
+        self.show()
+
+    @pyqtSlot()
+    def on_click(self):
+        print('Здесь типа кнопка что то делает')
+    
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Example()
+    ex = App()
     sys.exit(app.exec_())
